@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en" data-silo-theme="__SILO_THEME__">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="hdhomerun-asset-version" content="__ASSET_VERSION__" />
+    <title>Live TV (HDHomeRun)</title>
+    <script src="__ASSET_PREFIX__/theme.js?v=__ASSET_VERSION__"></script>
+    <link
+      rel="stylesheet"
+      href="__ASSET_PREFIX__/app.css?v=__ASSET_VERSION__"
+    />
+    <script defer src="__ASSET_PREFIX__/media.js?v=__ASSET_VERSION__"></script>
+    <script defer src="__ASSET_PREFIX__/app.js?v=__ASSET_VERSION__"></script>
+  </head>
+  <body class="__PAGE_CLASS__">
+    <header class="top">
+      <div class="topbar-primary">
+        <div class="brand">
+          <a
+            class="back icon-button"
+            href="/"
+            aria-label="Back to Silo"
+            title="Back to Silo"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="m15 18-6-6 6-6" /></svg
+          ></a>
+          <h1>Live TV <span>(HDHomeRun)</span></h1>
+        </div>
+        <nav aria-label="Live TV" class="topnav">
+          <a href="#channels" id="channels-tab"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="3" y="5" width="18" height="15" rx="2" />
+              <path d="m8 2 4 3 4-3M7 10h1m3 0h6M7 15h1m3 0h6" /></svg
+            ><span>Channels</span></a
+          ><a href="#guide" id="guide-tab"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="3" y="4" width="18" height="17" rx="2" />
+              <path d="M8 2v4m8-4v4M3 10h18m-12 0v11m0-5h12" /></svg
+            ><span>Guide</span></a
+          ><a href="#favorites" id="favorites-tab"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"
+              /></svg
+            ><span>My TV</span></a
+          >
+        </nav>
+      </div>
+      <div class="topbar-actions">
+        <span id="connection" class="muted">Connecting…</span
+        ><a
+          id="devices-tab"
+          class="icon-button"
+          aria-label="HDHomeRun devices"
+          title="Devices"
+          hidden
+          ><svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path
+              d="M9 4 10 2h4l1 2 2 1 2-.2 2 3.4-1.2 1.8v2l1.2 1.8-2 3.4-2-.2-2 1-1 2h-4l-1-2-2-1-2 .2-2-3.4 1.2-1.8v-2L3 8.2l2-3.4L7 5l2-1Z"
+            />
+            <circle cx="12" cy="11" r="3" /></svg
+        ></a>
+      </div>
+    </header>
+    <div id="notice" role="status">
+      <div id="notice-body" class="notice" hidden>
+        <span id="notice-text"></span
+        ><button
+          type="button"
+          id="notice-close"
+          class="icon-button"
+          aria-label="Dismiss message"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m6 6 12 12M6 18 18 6" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <main id="viewer">
+<section id="recent-channels" class="recent-channels" aria-label="Recently watched" hidden></section>
+<section id="multiview" class="multiview" aria-label="Multiview" hidden><header><h2>Multiview</h2><button id="multiview-close" type="button">Stop all</button></header><div id="multiview-grid" class="multiview-grid"></div></section>
+      <div class="watch-layout">
+        <aside class="channels-groups" aria-label="Channel groups">
+          <div class="group-shortcuts">
+            <button id="all-channels" class="group-button" type="button">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="3" y="5" width="18" height="15" rx="2" />
+                <path d="m8 2 4 3 4-3M7 10h1m3 0h6M7 15h1m3 0h6" /></svg
+              ><span>All channels</span><small id="all-count">0</small></button
+            ><button
+              id="favorites"
+              class="group-button"
+              type="button"
+              aria-pressed="false"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path
+                  d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"
+                /></svg
+              ><span>Favorites</span><small id="favorite-count">0</small>
+            </button>
+          </div>
+          <h2>Sources</h2>
+          <div id="source-groups"></div>
+          <a id="manage-devices" class="group-button manage-devices" hidden
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M9 4 10 2h4l1 2 2 1 2-.2 2 3.4-1.2 1.8v2l1.2 1.8-2 3.4-2-.2-2 1-1 2h-4l-1-2-2-1-2 .2-2-3.4 1.2-1.8v-2L3 8.2l2-3.4L7 5l2-1Z"
+              />
+              <circle cx="12" cy="11" r="3" /></svg
+            ><span>Manage devices</span></a
+          >
+        </aside>
+        <section class="channel-browser" aria-label="Channels and guide">
+          <div class="toolbar">
+            <label class="search"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="10.5" cy="10.5" r="6.5" />
+                <path d="m16 16 4 4" /></svg
+              ><span class="sr-only">Find a channel</span
+              ><input
+                id="search"
+                type="search"
+                placeholder="Search channels…" /></label
+            ><select
+              id="source"
+              class="mobile-source"
+              aria-label="Filter by source"
+            >
+              <option value="">All sources</option></select
+            ><span id="channel-count" class="muted"></span>
+          </div>
+          <div id="guide-tools" hidden>
+            <span class="guide-label">TV Guide</span>
+            <div class="guide-controls">
+              <button
+                id="previous"
+                class="icon-button"
+                aria-label="Previous three hours"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m15 18-6-6 6-6" />
+                </svg></button
+              ><button id="now">Now</button
+              ><button
+                id="next"
+                class="icon-button"
+                aria-label="Next three hours"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m9 6 6 6-6 6" />
+                </svg>
+              </button>
+            </div>
+            <span id="guide-time"></span>
+          </div>
+          <div id="channel-scroll" class="channel-scroll">
+            <div id="channel-list"></div>
+            <p id="empty" class="empty">Loading channels…</p>
+          </div>
+          <div id="pagination" class="pagination">
+            <span id="page-range" role="status"></span>
+            <div>
+              <button
+                id="page-previous"
+                class="icon-button"
+                aria-label="Previous channels"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m15 18-6-6 6-6" />
+                </svg></button
+              ><button
+                id="page-next"
+                class="icon-button"
+                aria-label="Next channels"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m9 6 6 6-6 6" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </section>
+        <aside id="detail" aria-label="Player and programme details">
+          <div class="player-placeholder">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="3" y="5" width="18" height="15" rx="2" />
+              <path d="m8 2 4 3 4-3M7 10h1m3 0h6M7 15h1m3 0h6" />
+            </svg>
+            <h2>Select a channel</h2>
+            <p>See what’s on and start watching.</p>
+          </div>
+        </aside>
+      </div>
+    </main>
+    <main id="admin" hidden>
+      <aside class="admin-sidebar" aria-label="HDHomeRun administration">
+        <h2>HDHomeRun</h2>
+        <a class="group-button active" href="#devices" aria-current="page"
+          ><svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path
+              d="M9 4 10 2h4l1 2 2 1 2-.2 2 3.4-1.2 1.8v2l1.2 1.8-2 3.4-2-.2-2 1-1 2h-4l-1-2-2-1-2 .2-2-3.4 1.2-1.8v-2L3 8.2l2-3.4L7 5l2-1Z"
+            />
+            <circle cx="12" cy="11" r="3" /></svg
+          ><span>Devices</span></a
+        ><a id="admin-channels" class="group-button"
+          ><svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="3" y="5" width="18" height="15" rx="2" />
+            <path d="m8 2 4 3 4-3M7 10h1m3 0h6M7 15h1m3 0h6" /></svg
+          ><span>Live TV</span></a
+        >
+      </aside>
+      <section class="admin-content">
+        <div class="section-heading">
+          <div>
+            <h2>Devices</h2>
+            <p>
+              Connect physical tuners or HDHomeRun-compatible services reachable
+              from the Silo server.
+            </p>
+          </div>
+          <div class="actions">
+            <button id="refresh">Refresh lineup</button
+            ><button id="add" class="primary">Add endpoint</button>
+          </div>
+        </div>
+        <div id="device-list">
+          <p class="device-empty">Loading devices…</p>
+        </div>
+        <form id="editor" hidden>
+          <div class="section-heading">
+            <h2 id="edit-title">Add endpoint</h2>
+            <button type="button" id="cancel">Cancel</button>
+          </div>
+          <div class="form-grid">
+            <label
+              >Name<input
+                name="name"
+                required
+                maxlength="120"
+                placeholder="Living room tuner" /></label
+            ><label
+              >Endpoint address<input
+                name="url"
+                required
+                type="text"
+                inputmode="url"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="192.168.1.30" /><small
+                >An IP address or URL. http:// is added when omitted.</small
+              ></label
+            ><label
+              >Tuner limit<input
+                name="tuner_limit"
+                type="number"
+                min="0"
+                max="64"
+                value="0"
+              /><small
+                >0 uses the device’s advertised count; falls back to one.</small
+              ></label
+            ><label>Shared server group<input name="capacity_group" maxlength="64" pattern="[a-zA-Z0-9_-]{1,64}" placeholder="Optional server key"><small>Use the same key for lineups sharing one tuner or emulator.</small></label
+            ><label>Shared tuner limit<input name="shared_tuner_limit" type="number" min="0" max="64" value="0"><small>Maximum streams across this group. 0 uses the smallest advertised count.</small></label
+            ><label
+              >Priority<input
+                name="priority"
+                type="number"
+                min="-1000"
+                max="1000"
+                value="0"
+              /><small
+                >Lower numbers are preferred for shared stations.</small
+              ></label
+            ><label class="check"
+              ><input name="enabled" type="checkbox" checked />Endpoint
+              enabled</label
+            >
+          </div>
+          <h3>Programme guide</h3>
+          <div class="form-grid">
+            <label
+              >Guide source<select name="guide_mode">
+                <option value="none">No guide</option>
+                <option value="silicondust">SiliconDust guide</option>
+                <option value="xmltv">XMLTV URL</option></select
+              ><small
+                >SiliconDust requires a supported physical tuner.</small
+              ></label
+            ><label
+              >XMLTV URL<input
+                name="guide_url"
+                type="url"
+                placeholder="https://provider.example/guide.xml.gz"
+              /><small>Leave empty when using a URL file below.</small></label
+            >
+          </div>
+          <details>
+            <summary>Advanced connection settings</summary>
+            <div class="form-grid">
+              <label
+                >XMLTV URL file<input
+                  name="guide_url_file"
+                  placeholder="/run/secrets/xmltv-url"
+                /><small
+                  >Path on the server containing the guide URL.</small
+                ></label
+              ><label
+                >Additional stream hosts<input
+                  name="allowed_hosts"
+                  placeholder="stream.example.com, 192.168.1.31"
+                /><small
+                  >Allow only hosts your emulator uses for media.</small
+                ></label
+              >
+            </div>
+          </details>
+          <details>
+            <summary>Channel names, guide matching, and failover</summary>
+            <p>
+              Channels stay separate by default. Give the same station key to
+              matching channels on different endpoints to enable tuner failover.
+              Guide IDs match the channel IDs in your XMLTV source.
+            </p>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Channel</th>
+                    <th>Display name</th>
+                    <th>Station key</th>
+                    <th>Guide ID</th>
+                    <th>Hide</th>
+                  </tr>
+                </thead>
+                <tbody id="mapping-rows"></tbody>
+              </table>
+            </div>
+            <p id="mapping-empty" class="muted" hidden>
+              Save and refresh this endpoint to load its channels.
+            </p>
+          </details>
+          <div class="form-footer">
+            <button type="button" id="check-connection">Check Connection</button>
+            <p id="save-status" role="status"></p>
+            <button type="submit" class="primary" id="save">
+              Save endpoint
+            </button>
+          </div>
+        </form>
+        <footer class="legal">
+          Player licenses: <a id="hls-license">Hls.js</a>,
+          <a id="mpegts-license">Mpegts.js</a>,
+          <a id="font-license">Plus Jakarta Sans</a>
+        </footer>
+      </section>
+    </main>
+  </body>
+</html>
