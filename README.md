@@ -5,7 +5,7 @@
 > Do not discuss it or request support on Silo Server’s official servers, forums,
 > issue trackers, or other platforms. Use this ATTMonk repository’s issues instead.
 
-Live TV from multiple physical or emulated HDHomeRun HTTP endpoints, built for the **ATTMonk Server**. Uses Silo Plugin SDK **v0.32.1** and the fork's `livetv/v1` contract.
+Live TV from multiple physical or emulated HDHomeRun HTTP endpoints, built for the **ATTMonk Server**. Uses Silo Plugin SDK **v0.35.0** and the fork's `livetv/v1` contract.
 
 - Explicit endpoint addresses, including URL path prefixes used by emulators.
 - **Check Connection** tests discovery and lineup access for the endpoint being edited, before saving; other saved endpoints cannot fail it. It does not reserve tuners or download guides.
